@@ -5,11 +5,49 @@ namespace SpriteKind {
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     player1sprite.vy = -200
 })
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    shotmeter(player1sprite)
-    shoot(player1sprite)
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    basketball = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . 3 3 3 . . . . . . . 
+        . . . . . 3 3 3 3 3 . . . . . . 
+        . . . . . 3 3 3 3 3 . . . . . . 
+        . . . . . 3 3 3 3 3 . . . . . . 
+        . . . . . . 3 3 3 . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Projectile)
+    basketball = sprites.createProjectileFromSprite(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . 3 3 3 . . . . . . . 
+        . . . . . 3 3 3 3 3 . . . . . . 
+        . . . . . 3 3 3 3 3 . . . . . . 
+        . . . . . 3 3 3 3 3 . . . . . . 
+        . . . . . . 3 3 3 . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, player1sprite, 70, -200)
+    basketball.ay = 250
 })
-function shotmeter (meter: Sprite) {
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    shotmeter(player1sprite, player1shotmeter)
+})
+function shotmeter (meter: Sprite, marker: Sprite) {
     player1shotmeter = sprites.create(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -28,9 +66,7 @@ function shotmeter (meter: Sprite) {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.meter)
-}
-function shoot (marker: Sprite) {
-    mySprite = sprites.create(img`
+    white_marker = sprites.create(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . 1 1 . . . . . . . 
         . . . . . . . 1 1 . . . . . . . 
@@ -48,16 +84,28 @@ function shoot (marker: Sprite) {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.Marker)
+    while (controller.A.isPressed()) {
+        player1sprite.setVelocity(0, 0)
+        meter.setPosition(player1sprite.x, player1sprite.y - 20)
+        marker.setPosition(player1shotmeter.x - 10, player1shotmeter.y)
+        marker.vx = 15
+        pause(1000)
+        sprites.destroy(meter)
+        sprites.destroy(marker)
+    }
+}
+function shoot (marker: Sprite) {
+	
 }
 sprites.onCreated(SpriteKind.meter, function (sprite) {
-    sprite.setPosition(player1sprite.x, player1sprite.y - 20)
+	
 })
 sprites.onCreated(SpriteKind.Marker, function (sprite) {
-    sprite.setPosition(player1shotmeter.x - 10, player1shotmeter.y)
-    sprite.vx = 15
+	
 })
-let mySprite: Sprite = null
+let white_marker: Sprite = null
 let player1shotmeter: Sprite = null
+let basketball: Sprite = null
 let player1sprite: Sprite = null
 scene.setBackgroundImage(img`
     8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
